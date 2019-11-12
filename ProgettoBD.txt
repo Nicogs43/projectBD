@@ -1,0 +1,417 @@
+-- SCHEMA: Progetto_BD_1819
+
+-- DROP SCHEMA "Progetto_BD_1819" ;
+
+CREATE SCHEMA "Progetto_BD_1819"
+    AUTHORIZATION postgres;
+-- Table: "Progetto_BD_1819"."Argomento"
+
+-- DROP TABLE "Progetto_BD_1819"."Argomento";
+
+CREATE TABLE "Progetto_BD_1819"."Argomento"
+(
+    "CodArg" integer NOT NULL,
+    "codCorso" character varying COLLATE pg_catalog."default" NOT NULL,
+    "Prereq" integer,
+    "NomeArg" character varying COLLATE pg_catalog."default",
+    "DescrizioneArg" text COLLATE pg_catalog."default",
+    CONSTRAINT "Argomento_pkey" PRIMARY KEY ("CodArg"),
+    CONSTRAINT "Prereq" FOREIGN KEY ("Prereq")
+        REFERENCES "Progetto_BD_1819"."Argomento" ("CodArg") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT "codCorso" FOREIGN KEY ("codCorso")
+        REFERENCES "Progetto_BD_1819"."Corso" ("CodiceCorso") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE "Progetto_BD_1819"."Argomento"
+    OWNER to postgres;
+
+-- Table: "Progetto_BD_1819"."Assignement "
+
+-- DROP TABLE "Progetto_BD_1819"."Assignement ";
+
+CREATE TABLE "Progetto_BD_1819"."Assignement "
+(
+    "NomeAssig" character(5) COLLATE pg_catalog."default" NOT NULL,
+    "Deadline " date,
+    "DataCons" date,
+    CONSTRAINT "NomeAssig" PRIMARY KEY ("NomeAssig")
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE "Progetto_BD_1819"."Assignement "
+    OWNER to postgres;
+
+-- Table: "Progetto_BD_1819"."Attività"
+
+-- DROP TABLE "Progetto_BD_1819"."Attività";
+
+CREATE TABLE "Progetto_BD_1819"."Attività"
+(
+    "Nome" character(1) COLLATE pg_catalog."default" NOT NULL,
+    "CodAtt" character varying COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "Attività_pkey" PRIMARY KEY ("CodAtt")
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE "Progetto_BD_1819"."Attività"
+    OWNER to postgres;
+
+-- Table: "Progetto_BD_1819"."Automatico"
+
+-- DROP TABLE "Progetto_BD_1819"."Automatico";
+
+CREATE TABLE "Progetto_BD_1819"."Automatico"
+(
+
+)
+    INHERITS ("Progetto_BD_1819"."Voto")
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE "Progetto_BD_1819"."Automatico"
+    OWNER to postgres;
+
+-- Table: "Progetto_BD_1819"."Corso"
+
+-- DROP TABLE "Progetto_BD_1819"."Corso";
+
+CREATE TABLE "Progetto_BD_1819"."Corso"
+(
+    "CodiceCorso" character varying COLLATE pg_catalog."default" NOT NULL,
+    "Titolo" text COLLATE pg_catalog."default",
+    "DescCorso" text COLLATE pg_catalog."default",
+    "Sommario" text COLLATE pg_catalog."default",
+    "Prerequisiti" text COLLATE pg_catalog."default",
+    "Letture" text COLLATE pg_catalog."default",
+    "Lingua" character(1) COLLATE pg_catalog."default",
+    "Data" date,
+    "Durata" numeric,
+    "OreLavoro" numeric,
+    "NumSettimane" numeric,
+    "Docente" character(1) COLLATE pg_catalog."default",
+    CONSTRAINT "Corso_pkey" PRIMARY KEY ("CodiceCorso"),
+    CONSTRAINT "Docente" FOREIGN KEY ("Docente")
+        REFERENCES "Progetto_BD_1819"."Docente" ("CodDoc") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE "Progetto_BD_1819"."Corso"
+    OWNER to postgres;
+
+-- Table: "Progetto_BD_1819"."Docente"
+
+-- DROP TABLE "Progetto_BD_1819"."Docente";
+
+CREATE TABLE "Progetto_BD_1819"."Docente"
+(
+    "Nome" character(1) COLLATE pg_catalog."default",
+    "Cognome" character(1) COLLATE pg_catalog."default",
+    "Affiliaz" text COLLATE pg_catalog."default",
+    "Ruolo" character(1) COLLATE pg_catalog."default",
+    "Foto" bytea,
+    "Curriculum" text COLLATE pg_catalog."default",
+    "CodDoc" character(1) COLLATE pg_catalog."default" NOT NULL,
+    "Università" character(1) COLLATE pg_catalog."default",
+    CONSTRAINT "CodDoc" PRIMARY KEY ("CodDoc"),
+    CONSTRAINT "Uni" FOREIGN KEY ("Università")
+        REFERENCES "Progetto_BD_1819"."Università" ("Sigla") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE "Progetto_BD_1819"."Docente"
+    OWNER to postgres;
+
+-- Table: "Progetto_BD_1819"."Domande"
+
+-- DROP TABLE "Progetto_BD_1819"."Domande";
+
+CREATE TABLE "Progetto_BD_1819"."Domande"
+(
+    "codQuiz" integer NOT NULL,
+    "NDom" integer NOT NULL,
+    "TestoDom" text COLLATE pg_catalog."default",
+    CONSTRAINT "CodDom" PRIMARY KEY ("NDom", "codQuiz"),
+    CONSTRAINT "codQuiz" FOREIGN KEY ("codQuiz")
+        REFERENCES "Progetto_BD_1819"."Quiz" ("CodQuiz") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE "Progetto_BD_1819"."Domande"
+    OWNER to postgres;
+
+-- Table: "Progetto_BD_1819"."Esercizio"
+
+-- DROP TABLE "Progetto_BD_1819"."Esercizio";
+
+CREATE TABLE "Progetto_BD_1819"."Esercizio"
+(
+
+)
+    INHERITS ("Progetto_BD_1819"."Assignement ")
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE "Progetto_BD_1819"."Esercizio"
+    OWNER to postgres;
+
+-- Table: "Progetto_BD_1819"."Forum"
+
+-- DROP TABLE "Progetto_BD_1819"."Forum";
+
+CREATE TABLE "Progetto_BD_1819"."Forum"
+(
+    "Titolothread" text COLLATE pg_catalog."default",
+    "codUtente" character(1) COLLATE pg_catalog."default" NOT NULL,
+    "CodThread" character(5) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "codThread" PRIMARY KEY ("CodThread", "codUtente"),
+    CONSTRAINT "CodThread" FOREIGN KEY ("CodThread")
+        REFERENCES "Progetto_BD_1819"."Messaggio" ("codMessage") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE "Progetto_BD_1819"."Forum"
+    OWNER to postgres;
+
+-- Table: "Progetto_BD_1819"."Messaggio"
+
+-- DROP TABLE "Progetto_BD_1819"."Messaggio";
+
+CREATE TABLE "Progetto_BD_1819"."Messaggio"
+(
+    "codUtente" character(5) COLLATE pg_catalog."default",
+    "Titolomsg" character(10) COLLATE pg_catalog."default",
+    "Testomsg" text COLLATE pg_catalog."default",
+    "ThreadInz" boolean,
+    "Threadchiuso" boolean,
+    "MotivoChiusura" text COLLATE pg_catalog."default",
+    "codMessage" character(5) COLLATE pg_catalog."default" NOT NULL,
+    "RispondeCodMess" character(5) COLLATE pg_catalog."default",
+    CONSTRAINT "Messaggio_pkey" PRIMARY KEY ("codMessage"),
+    CONSTRAINT "RispondeCodMess" FOREIGN KEY ("RispondeCodMess")
+        REFERENCES "Progetto_BD_1819"."Messaggio" ("codMessage") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE "Progetto_BD_1819"."Messaggio"
+    OWNER to postgres;
+
+-- Table: "Progetto_BD_1819"."PeerEval"
+
+-- DROP TABLE "Progetto_BD_1819"."PeerEval";
+
+CREATE TABLE "Progetto_BD_1819"."PeerEval"
+(
+
+)
+    INHERITS ("Progetto_BD_1819"."Voto")
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE "Progetto_BD_1819"."PeerEval"
+    OWNER to postgres;
+
+-- Table: "Progetto_BD_1819"."Quiz"
+
+-- DROP TABLE "Progetto_BD_1819"."Quiz";
+
+CREATE TABLE "Progetto_BD_1819"."Quiz"
+(
+    "CodQuiz" integer NOT NULL,
+    CONSTRAINT "Quiz_pkey" PRIMARY KEY ("CodQuiz")
+)
+    INHERITS ("Progetto_BD_1819"."Assignement ")
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE "Progetto_BD_1819"."Quiz"
+    OWNER to postgres;
+
+-- Table: "Progetto_BD_1819"."Risposta"
+
+-- DROP TABLE "Progetto_BD_1819"."Risposta";
+
+CREATE TABLE "Progetto_BD_1819"."Risposta"
+(
+)
+
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE "Progetto_BD_1819"."Risposta"
+    OWNER to postgres;
+
+-- Table: "Progetto_BD_1819"."SelfStudy"
+
+-- DROP TABLE "Progetto_BD_1819"."SelfStudy";
+
+CREATE TABLE "Progetto_BD_1819"."SelfStudy"
+(
+)
+
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE "Progetto_BD_1819"."SelfStudy"
+    OWNER to postgres;
+
+-- Table: "Progetto_BD_1819"."Settimana "
+
+-- DROP TABLE "Progetto_BD_1819"."Settimana ";
+
+CREATE TABLE "Progetto_BD_1819"."Settimana "
+(
+    "DataIn" date,
+    "DataFine" date,
+    "codSet" numeric NOT NULL,
+    CONSTRAINT "CodSettimana " PRIMARY KEY ("codSet")
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE "Progetto_BD_1819"."Settimana "
+    OWNER to postgres;
+
+-- Table: "Progetto_BD_1819"."Staff"
+
+-- DROP TABLE "Progetto_BD_1819"."Staff";
+
+CREATE TABLE "Progetto_BD_1819"."Staff"
+(
+)
+
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE "Progetto_BD_1819"."Staff"
+    OWNER to postgres;
+
+-- Table: "Progetto_BD_1819"."Studente"
+
+-- DROP TABLE "Progetto_BD_1819"."Studente";
+
+CREATE TABLE "Progetto_BD_1819"."Studente"
+(
+)
+
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE "Progetto_BD_1819"."Studente"
+    OWNER to postgres;
+
+-- Table: "Progetto_BD_1819"."Università"
+
+-- DROP TABLE "Progetto_BD_1819"."Università";
+
+CREATE TABLE "Progetto_BD_1819"."Università"
+(
+    "Sigla" character(1) COLLATE pg_catalog."default" NOT NULL,
+    "Nome" text COLLATE pg_catalog."default",
+    "Descrizione" text COLLATE pg_catalog."default",
+    "Logo" text COLLATE pg_catalog."default",
+    "PagWeb" text COLLATE pg_catalog."default",
+    CONSTRAINT "Università_pkey" PRIMARY KEY ("Sigla")
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE "Progetto_BD_1819"."Università"
+    OWNER to postgres;
+
+COMMENT ON COLUMN "Progetto_BD_1819"."Università"."Logo"
+    IS 'Link all''immagine del logo';
+
+-- Table: "Progetto_BD_1819"."Utente"
+
+-- DROP TABLE "Progetto_BD_1819"."Utente";
+
+CREATE TABLE "Progetto_BD_1819"."Utente"
+(
+)
+
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE "Progetto_BD_1819"."Utente"
+    OWNER to postgres;
+
+-- Table: "Progetto_BD_1819"."Voto"
+
+-- DROP TABLE "Progetto_BD_1819"."Voto";
+
+CREATE TABLE "Progetto_BD_1819"."Voto"
+(
+    "CodEserc" character(5) COLLATE pg_catalog."default",
+    "Risultato" integer NOT NULL,
+    "DataVoto" date,
+    "DataEserciz" date
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE "Progetto_BD_1819"."Voto"
+    OWNER to postgres;
+

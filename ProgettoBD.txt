@@ -1,5 +1,5 @@
 -- SCHEMA: Progetto_BD_1819
--- Prova Prova 
+-- Prova Prova prova
 -- DROP SCHEMA "Progetto_BD_1819" ;
 
 CREATE SCHEMA "Progetto_BD_1819"
@@ -60,6 +60,7 @@ CREATE TABLE "Progetto_BD_1819"."Attività"
 (
     "Nome" character(1) COLLATE pg_catalog."default" NOT NULL,
     "CodAtt" character varying COLLATE pg_catalog."default" NOT NULL,
+    tipoatt "typeattività" NOT NULL,
     CONSTRAINT "Attività_pkey" PRIMARY KEY ("CodAtt")
 )
 WITH (
@@ -196,6 +197,7 @@ CREATE TABLE "Progetto_BD_1819"."Forum"
     "Titolothread" text COLLATE pg_catalog."default",
     "codUtente" character(1) COLLATE pg_catalog."default" NOT NULL,
     "CodThread" character(5) COLLATE pg_catalog."default" NOT NULL,
+    tipologia tipoforum NOT NULL,
     CONSTRAINT "codThread" PRIMARY KEY ("CodThread", "codUtente"),
     CONSTRAINT "CodThread" FOREIGN KEY ("CodThread")
         REFERENCES "Progetto_BD_1819"."Messaggio" ("codMessage") MATCH SIMPLE
@@ -352,8 +354,9 @@ ALTER TABLE "Progetto_BD_1819"."Settimana "
 
 CREATE TABLE "Progetto_BD_1819"."Staff"
 (
-)
 
+)
+INHERITS ("Progetto_BD_1819".utente)
 WITH (
     OIDS = FALSE
 )
@@ -369,7 +372,7 @@ ALTER TABLE "Progetto_BD_1819"."Staff"
 CREATE TABLE "Progetto_BD_1819"."Studente"
 (
 )
-
+ INHERITS ("Progetto_BD_1819".utente)
 WITH (
     OIDS = FALSE
 )
@@ -402,20 +405,66 @@ ALTER TABLE "Progetto_BD_1819"."Università"
 COMMENT ON COLUMN "Progetto_BD_1819"."Università"."Logo"
     IS 'Link all''immagine del logo';
 
--- Table: "Progetto_BD_1819"."Utente"
+-- Table: "Progetto_BD_1819".utente
 
--- DROP TABLE "Progetto_BD_1819"."Utente";
+-- DROP TABLE "Progetto_BD_1819".utente;
 
-CREATE TABLE "Progetto_BD_1819"."Utente"
+CREATE TABLE "Progetto_BD_1819".utente
 (
+    codutente character(10) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT codutente PRIMARY KEY (codutente),
+    CONSTRAINT profilo FOREIGN KEY (codutente)
+        REFERENCES "Progetto_BD_1819"."profilo " (codutente) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
 )
-
 WITH (
     OIDS = FALSE
 )
 TABLESPACE pg_default;
 
-ALTER TABLE "Progetto_BD_1819"."Utente"
+ALTER TABLE "Progetto_BD_1819".utente
+    OWNER to postgres;
+
+-- Table: "Progetto_BD_1819"."profilo "
+
+-- DROP TABLE "Progetto_BD_1819"."profilo ";
+
+CREATE TABLE "Progetto_BD_1819"."profilo "
+(
+    codutente character(10) COLLATE pg_catalog."default" NOT NULL,
+    foto bigint,
+    "lcoalità" character varying(64) COLLATE pg_catalog."default",
+    genere "char",
+    datanasc date,
+    "about me " text COLLATE pg_catalog."default",
+    linksocial character varying[] COLLATE pg_catalog."default",
+    CONSTRAINT "profilo _pkey" PRIMARY KEY (codutente)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE "Progetto_BD_1819"."profilo "
+    OWNER to postgres;
+
+-- Table: "Progetto_BD_1819"."iscritto "
+
+-- DROP TABLE "Progetto_BD_1819"."iscritto ";
+
+CREATE TABLE "Progetto_BD_1819"."iscritto "
+(
+    "CodiceCorso" character varying COLLATE pg_catalog."default" NOT NULL,
+    codutente character(10) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "iscritto _pkey" PRIMARY KEY ("CodiceCorso", codutente)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE "Progetto_BD_1819"."iscritto "
     OWNER to postgres;
 
 -- Table: "Progetto_BD_1819"."Voto"

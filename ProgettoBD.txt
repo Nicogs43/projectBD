@@ -279,8 +279,15 @@ ALTER TABLE "Progetto_BD_1819"."Quiz"
 
 CREATE TABLE "Progetto_BD_1819"."Risposta"
 (
+    "Punteggio" numeric,
+    "CodRisposta" numeric(10,0) NOT NULL,
+    "CodDom" integer,
+    CONSTRAINT "Risposta_pkey" PRIMARY KEY ("CodRisposta"),
+    CONSTRAINT "CodDom" FOREIGN KEY ("CodDom")
+        REFERENCES "Progetto_BD_1819"."Domande" ("NDom") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
 )
-
 WITH (
     OIDS = FALSE
 )
@@ -295,8 +302,23 @@ ALTER TABLE "Progetto_BD_1819"."Risposta"
 
 CREATE TABLE "Progetto_BD_1819"."SelfStudy"
 (
+    "Corso" character(1) COLLATE pg_catalog."default" NOT NULL,
+    "Argomenti" integer,
+    "QuizSF" integer,
+    CONSTRAINT "SelfStudy_pkey" PRIMARY KEY ("Corso"),
+    CONSTRAINT "CodQuiz" FOREIGN KEY ("QuizSF")
+        REFERENCES "Progetto_BD_1819"."Quiz" ("CodQuiz") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT "Corso" FOREIGN KEY ("Corso")
+        REFERENCES "Progetto_BD_1819"."Corso" ("CodiceCorso") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT "SelfStudy_Argomenti_fkey" FOREIGN KEY ("Argomenti")
+        REFERENCES "Progetto_BD_1819"."Argomento" ("CodArg") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
 )
-
 WITH (
     OIDS = FALSE
 )

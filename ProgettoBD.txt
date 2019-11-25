@@ -1,5 +1,4 @@
 -- SCHEMA: Progetto_BD_1819
--- Prova Prova prova
 -- DROP SCHEMA "Progetto_BD_1819" ;
 
 CREATE SCHEMA "Progetto_BD_1819"

@@ -1,6 +1,7 @@
 -- SCHEMA: Progetto_BD_1819
 -- DROP SCHEMA "Progetto_BD_1819" ;
---25/11/2019
+--25/11/2019 
+--Prova
 CREATE SCHEMA "Progetto_BD_1819"
     AUTHORIZATION postgres;
 -- Table: "Progetto_BD_1819"."Argomento"
